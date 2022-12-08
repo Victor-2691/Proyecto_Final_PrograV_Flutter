@@ -2,8 +2,12 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:proyecto_final_prograv/class_asistencia.dart';
+import 'package:proyecto_final_prograv/class_service_matricula.dart';
+import 'package:proyecto_final_prograv/screen_asistencia.dart';
 
 import 'class_estudiantes_grupos.dart';
+import 'class_matricula.dart';
 
 class screen_est_grupos extends StatefulWidget {
   final String tipoId;
@@ -39,16 +43,10 @@ class _screen_est_gruposState extends State<screen_est_grupos> {
             itemBuilder: (context, index) {
               return ListTile(
                 //Con la propiedad onTap agregamos funcioanlidad al trailing que es la fecla que se muestra al final
-                onTap: () {
-                  //Enviar datos del estudiante y el codigo del curso 3 parametros
-                  // recogemos el codigo de la carrera
-
-                  // String codigocarrera = data[index].codigoCarrera;
-                  // Navigator.push(
-                  //     context,
-                  //     MaterialPageRoute(
-                  //         builder: ((context) => screen_curso(
-                  //             widget.tipoId, widget.id, codigocarrera))));
+                onLongPress: () {
+                  _consulasistencia(context, data[index].codigoCurso,
+                      data[index].numeroGrupo);
+                  //Enviar datos del estudiante - codigocurso - numero grupo
 
                   //Por ejemplo capturar los datos como el codigo de la carrera y pasarlo a otra pantalla
                   //Codigo cuando da click a algun elemento
@@ -66,6 +64,35 @@ class _screen_est_gruposState extends State<screen_est_grupos> {
             }));
   }
 
+  _consulasistencia(context, String codigocurso, int numerogrupo) {
+    showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+              title: Text("Asistencia"),
+              content: Text(
+                  "¿Esta seguro que desea registrar la asistencia de este curso "
+                  " ?"),
+              actions: [
+                FloatingActionButton.large(
+                  onPressed: () {
+                    Navigator.pop(context);
+                    //realizamos la matricula
+                    _createAsistencia(codigocurso, numerogrupo);
+                  },
+                  child: Text("Matricular"),
+                ),
+                FloatingActionButton.large(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: Text(
+                    "Cancelar",
+                  ),
+                )
+              ],
+            ));
+  }
+
   //Api Consulta Cursos por carrera
   static Future<List<EstudiantesGrupos>?> getCursos_Estudiante(
       String id) async {
@@ -81,6 +108,38 @@ class _screen_est_gruposState extends State<screen_est_grupos> {
       return carreras;
     } else {
       return null;
+    }
+  }
+
+  void _createAsistencia(String codigocurso, int numerogrupo) async {
+    var c = Asistencia();
+    c
+      ..numerogrupo = numerogrupo
+      ..codigocurso = codigocurso
+      ..fechaAsistencia = '2022-01-01'
+      ..tipoasistencia = "Presente"
+      ..tipoId = widget.tipoId
+      ..identificacion = widget.id;
+
+    var resultado = await matricula_service.postAsistencia(c);
+
+    if (resultado == "201") {
+      final snackBar =
+          SnackBar(content: Text('La asistencia se registro con exito'));
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    }
+    if (resultado == "409") {
+      final snackBar = SnackBar(
+          content: Text('Ya existe un registro de asistencia para este curso'));
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    }
+    if (resultado == "500") {
+      final snackBar = SnackBar(content: Text('Error de servidor'));
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    }
+    if (resultado == "") {
+      final snackBar = SnackBar(content: Text('Error de servidor'));
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
     }
   }
 }

@@ -1,17 +1,16 @@
 // To parse this JSON data, do
 //
-//     final estudiantesGrupos = estudiantesGruposFromJson(jsonString);
+//     final asistencia = asistenciaFromJson(jsonString);
 
 import 'dart:convert';
 
-EstudiantesGrupos estudiantesGruposFromJson(String str) =>
-    EstudiantesGrupos.fromJson(json.decode(str));
+Asistencia asistenciaFromJson(String str) =>
+    Asistencia.fromJson(json.decode(str));
 
-String estudiantesGruposToJson(EstudiantesGrupos data) =>
-    json.encode(data.toJson());
+String asistenciaToJson(Asistencia data) => json.encode(data.toJson());
 
-class EstudiantesGrupos {
-  EstudiantesGrupos({
+class Asistencia {
+  Asistencia({
     this.tipoId,
     this.identificacion,
     this.codigocurso,
@@ -24,16 +23,15 @@ class EstudiantesGrupos {
   String? identificacion;
   String? codigocurso;
   int? numerogrupo;
-  DateTime? fechaAsistencia;
+  String? fechaAsistencia;
   String? tipoasistencia;
 
-  factory EstudiantesGrupos.fromJson(Map<String, dynamic> json) =>
-      EstudiantesGrupos(
+  factory Asistencia.fromJson(Map<String, dynamic> json) => Asistencia(
         tipoId: json["tipo_ID"],
         identificacion: json["identificacion"],
         codigocurso: json["codigocurso"],
         numerogrupo: json["numerogrupo"],
-        fechaAsistencia: DateTime.parse(json["fechaAsistencia"]),
+        fechaAsistencia: (json["fechaAsistencia"]),
         tipoasistencia: json["tipoasistencia"],
       );
 
@@ -42,7 +40,7 @@ class EstudiantesGrupos {
         "identificacion": identificacion,
         "codigocurso": codigocurso,
         "numerogrupo": numerogrupo,
-        "fechaAsistencia": fechaAsistencia?.toIso8601String(),
+        "fechaAsistencia": fechaAsistencia,
         "tipoasistencia": tipoasistencia,
       };
 }
