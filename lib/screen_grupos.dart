@@ -38,18 +38,15 @@ class _grupos_screenState extends State<grupos_screen> {
               return ListTile(
                 //Con la propiedad onTap agregamos funcioanlidad al trailing que es la fecla que se muestra al final
                 onLongPress: () {
-                  // //Enviar datos del estudiante - codigoCurso
-                  //  String codigoCurso = data[index].codigoCurso;
-                  // Navigator.push(
-                  //     context,
-                  //     MaterialPageRoute(
-                  //         builder: ((context) => grupos_screen(widget.tipoid, widget.id, codigoCurso))));
+                  _consultamatricula(context, data[index].numeroGrupo);
                 },
                 title: Text("Numero Grupo : " +
                     data[index].numeroGrupo.toString() +
-                    "-" +
+                    " " +
+                    "Horario : " +
                     data[index].horario),
-                subtitle: Text(data[index].nombre +
+                subtitle: Text("Profesor : " +
+                    data[index].nombre +
                     " " +
                     data[index].primerApellido +
                     " " +
