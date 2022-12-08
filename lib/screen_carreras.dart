@@ -1,10 +1,8 @@
 import 'dart:convert';
-import 'dart:html';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:proyecto_final_prograv/screen_cursos.dart';
-import 'package:proyecto_final_prograv/screen_main.dart';
 
 import 'class_carreras.dart';
 
@@ -22,7 +20,7 @@ class _matriculaState extends State<matricula> {
 
   void initState() {
     super.initState();
-
+    CircularProgressIndicator();
     getCarreras().then((value) {
       setState(() {
         data.addAll(value!);
