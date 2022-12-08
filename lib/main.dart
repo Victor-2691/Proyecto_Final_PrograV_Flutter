@@ -13,7 +13,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demoss',
+      title: 'Flutter Demo',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
@@ -62,28 +62,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             OutlinedButton.icon(
                 onPressed: () {
-                  String respuesta = "";
                   ValidaEstudiante();
-                  switch (respuesta) {
-                    case "200":
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: ((context) => screen_main())));
-
-                      break;
-                    case "404":
-                      final snackBar = SnackBar(
-                          content:
-                              Text("Estudiante no se encuentra registrado"));
-                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                      break;
-                    case "500":
-                      final snackBar =
-                          SnackBar(content: Text("Error del servidor"));
-                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                      break;
-                  }
                 },
                 icon: Icon(
                   Icons.login_sharp,
@@ -98,19 +77,23 @@ class _MyHomePageState extends State<MyHomePage> {
 
   //Metodo consume API
   Future<void> ValidaEstudiante() async {
-    String retorno = "";
     if (idController.text.isNotEmpty && tipoidController.text.isNotEmpty) {
+      String tipoid = tipoidController.text;
+      String identific = idController.text;
+
       var url = Uri.parse(
           'http://apisprogravfinal.somee.com/api/Estudiantes/Validaestudiante');
       var respuesta = await http.post(url,
           body: ({
-            'tipo_ID': tipoidController.text,
-            'identificacion': idController.text,
+            'tipo_ID': tipoid,
+            'identificacion': identific,
           }));
       //validamos la respuesta
       if (respuesta.statusCode == 200) {
         Navigator.push(
-            context, MaterialPageRoute(builder: ((context) => screen_main())));
+            context,
+            MaterialPageRoute(
+                builder: ((context) => screen_main(tipoid, identific))));
         //  retorno = "200";
         // return retorno;
       }
@@ -122,8 +105,8 @@ class _MyHomePageState extends State<MyHomePage> {
         //  return retorno;
       }
       if (respuesta.statusCode == 500) {
-        // retorno = "500";
-        // return retorno;
+        final snackBar = SnackBar(content: Text("Error de servidor"));
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
       }
     } else {
       final snackBar =

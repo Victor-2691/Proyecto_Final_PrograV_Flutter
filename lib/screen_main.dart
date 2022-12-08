@@ -1,14 +1,22 @@
+// ignore_for_file: empty_constructor_bodies
+
 import 'package:flutter/material.dart';
 import 'package:proyecto_final_prograv/main.dart';
-import 'package:proyecto_final_prograv/matricula.dart';
+import 'package:proyecto_final_prograv/screen_carreras.dart';
 
 class screen_main extends StatefulWidget {
+  final String tipoId;
+  final String id;
+  const screen_main(this.tipoId, this.id, {super.key});
+
   @override
   State<screen_main> createState() => _screen_mainState();
 }
 
 class _screen_mainState extends State<screen_main> {
   @override
+  //Variables para enviar
+
   Widget build(BuildContext context) {
     return Scaffold(
       body: Padding(
@@ -23,8 +31,11 @@ class _screen_mainState extends State<screen_main> {
             ),
             OutlinedButton.icon(
                 onPressed: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: ((context) => matricula())));
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: ((context) =>
+                              matricula(widget.tipoId, widget.id))));
                   //codigo boton matricular aqui
                 },
                 icon: Icon(
