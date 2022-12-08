@@ -4,10 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:proyecto_final_prograv/class_asistencia.dart';
 import 'package:proyecto_final_prograv/class_service_matricula.dart';
-import 'package:proyecto_final_prograv/screen_asistencia.dart';
-
 import 'class_estudiantes_grupos.dart';
-import 'class_matricula.dart';
+import 'package:intl/intl.dart';
 
 class screen_est_grupos extends StatefulWidget {
   final String tipoId;
@@ -34,9 +32,11 @@ class _screen_est_gruposState extends State<screen_est_grupos> {
 
   @override
   Widget build(BuildContext context) {
+    DateTime now = DateTime.now();
+    String formattedDate = DateFormat('yyyy-MM-dd – kk:mm').format(now);
     return Scaffold(
         appBar: AppBar(
-          title: Center(child: Text("Grupos Estudiante ID : " + widget.id)),
+          title: Center(child: Text("Asisten " + formattedDate)),
         ),
         body: ListView.builder(
             itemCount: data.length,
@@ -45,7 +45,7 @@ class _screen_est_gruposState extends State<screen_est_grupos> {
                 //Con la propiedad onTap agregamos funcioanlidad al trailing que es la fecla que se muestra al final
                 onLongPress: () {
                   _consulasistencia(context, data[index].codigoCurso,
-                      data[index].numeroGrupo);
+                      data[index].numeroGrupo, formattedDate);
                   //Enviar datos del estudiante - codigocurso - numero grupo
 
                   //Por ejemplo capturar los datos como el codigo de la carrera y pasarlo a otra pantalla
@@ -64,7 +64,8 @@ class _screen_est_gruposState extends State<screen_est_grupos> {
             }));
   }
 
-  _consulasistencia(context, String codigocurso, int numerogrupo) {
+  _consulasistencia(
+      context, String codigocurso, int numerogrupo, String fecha) {
     showDialog(
         context: context,
         builder: (context) => AlertDialog(
@@ -77,9 +78,9 @@ class _screen_est_gruposState extends State<screen_est_grupos> {
                   onPressed: () {
                     Navigator.pop(context);
                     //realizamos la matricula
-                    _createAsistencia(codigocurso, numerogrupo);
+                    _createAsistencia(codigocurso, numerogrupo, fecha);
                   },
-                  child: Text("Matricular"),
+                  child: Text("Registrar"),
                 ),
                 FloatingActionButton.large(
                   onPressed: () {
@@ -111,7 +112,8 @@ class _screen_est_gruposState extends State<screen_est_grupos> {
     }
   }
 
-  void _createAsistencia(String codigocurso, int numerogrupo) async {
+  void _createAsistencia(
+      String codigocurso, int numerogrupo, String fecha) async {
     var c = Asistencia();
     c
       ..numerogrupo = numerogrupo

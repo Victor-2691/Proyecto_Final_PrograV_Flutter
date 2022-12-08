@@ -38,7 +38,7 @@ class matricula_service {
       return "201";
     }
     if (response.statusCode == 409) {
-      return "404";
+      return "409";
     }
     if (response.statusCode == 500) {
       return "error de servidor";
