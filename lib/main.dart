@@ -66,7 +66,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 },
                 icon: Icon(
                   Icons.login_sharp,
-                  size: 30,
+                  size: 45,
                 ),
                 label: Text("Validar"))
           ],

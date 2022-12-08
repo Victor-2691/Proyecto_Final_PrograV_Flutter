@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:proyecto_final_prograv/main.dart';
 import 'package:proyecto_final_prograv/screen_carreras.dart';
+import 'package:proyecto_final_prograv/screen_estudiantes_grupos.dart';
 
 class screen_main extends StatefulWidget {
   final String tipoId;
@@ -44,7 +45,14 @@ class _screen_mainState extends State<screen_main> {
                 ),
                 label: Text("Matricular")),
             OutlinedButton.icon(
-                onPressed: () {},
+                onPressed: () {
+                  //Codigo boton asistencia
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: ((context) =>
+                              screen_est_grupos(widget.tipoId, widget.id))));
+                },
                 icon: Icon(
                   Icons.assignment,
                   size: 30,

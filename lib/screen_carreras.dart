@@ -20,7 +20,6 @@ class _matriculaState extends State<matricula> {
 
   void initState() {
     super.initState();
-    CircularProgressIndicator();
     getCarreras().then((value) {
       setState(() {
         data.addAll(value!);
